@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>숫자 맞추기 게임</title>
+    <style>
+        body {
+            font-family: -apple-system, "Segoe UI", sans-serif;
+            max-width: 480px;
+            margin: 60px auto;
+            text-align: center;
+            color: #222;
+        }
+        h1 { font-size: 1.6rem; }
+        input[type="number"] {
+            font-size: 1.2rem;
+            padding: 8px;
+            width: 120px;
+            text-align: center;
+        }
+        button {
+            font-size: 1.1rem;
+            padding: 8px 16px;
+            margin-left: 8px;
+            cursor: pointer;
+        }
+        .message {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+        }
+        .low { color: #d97706; }
+        .high { color: #2563eb; }
+        .win { color: #16a34a; }
+        ul.history {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+            color: #555;
+        }
+        a.new-game {
+            display: inline-block;
+            margin-top: 24px;
+            color: #2563eb;
+        }
+    </style>
+</head>
+<body>
+    <h1>1부터 100 사이의 숫자를 맞춰보세요!</h1>
+
+    {% if message %}
+    <p class="message {{ message_class }}">{{ message }}</p>
+    {% endif %}
+
+    {% if not won %}
+    <form action="/guess" method="post">
+        <input type="number" name="guess" min="1" max="100" required autofocus>
+        <button type="submit">추측하기</button>
+    </form>
+    {% endif %}
+
+    <p>시도 횟수: {{ attempts }}</p>
+
+    {% if history %}
+    <ul class="history">
+        {% for h in history %}
+        <li>{{ h }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
+    <a class="new-game" href="/new">새 게임 시작</a>
+</body>
+</html>
