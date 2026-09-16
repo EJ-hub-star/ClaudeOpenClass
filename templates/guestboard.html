@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>방명록</title>
+    <style>
+        :root {
+            --green-900: #14532d;
+            --green-700: #15803d;
+            --green-600: #16a34a;
+            --green-500: #22c55e;
+            --green-100: #dcfce7;
+            --green-50: #f0fdf4;
+        }
+        * { box-sizing: border-box; }
+        body {
+            font-family: "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+            background: linear-gradient(180deg, var(--green-50) 0%, #ffffff 220px);
+            margin: 0;
+            padding: 40px 16px 80px;
+            color: #1f2937;
+        }
+        .wrap {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        header h1 {
+            font-size: 2rem;
+            color: var(--green-900);
+            margin: 0 0 6px;
+        }
+        header p {
+            color: #4b5563;
+            margin: 0;
+        }
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px rgba(20, 83, 45, 0.08);
+            padding: 24px;
+            margin-bottom: 28px;
+            border: 1px solid var(--green-100);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 1.1rem;
+            color: var(--green-700);
+        }
+        .field {
+            margin-bottom: 14px;
+        }
+        .field label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--green-900);
+            margin-bottom: 6px;
+        }
+        .field input,
+        .field textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-family: inherit;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+        .field input:focus,
+        .field textarea:focus {
+            outline: none;
+            border-color: var(--green-500);
+            box-shadow: 0 0 0 3px var(--green-100);
+        }
+        .field textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        .row {
+            display: flex;
+            gap: 12px;
+        }
+        .row .field { flex: 1; }
+        button.submit {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--green-600);
+            color: #fff;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        button.submit:hover { background: var(--green-700); }
+
+        .error {
+            background: #fef2f2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+            border-radius: 10px;
+            padding: 10px 14px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .entries {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .entry {
+            background: #fff;
+            border-radius: 14px;
+            border: 1px solid #e5e7eb;
+            padding: 18px 20px;
+            margin-bottom: 14px;
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+        .avatar {
+            flex-shrink: 0;
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--green-500), var(--green-700));
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        .entry-body { flex: 1; min-width: 0; }
+        .entry-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .entry-name {
+            font-weight: 700;
+            color: var(--green-900);
+        }
+        .entry-date {
+            font-size: 0.78rem;
+            color: #9ca3af;
+        }
+        .entry-message {
+            margin: 8px 0 10px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            line-height: 1.5;
+        }
+        details.delete-box { margin-top: 4px; }
+        details.delete-box summary {
+            cursor: pointer;
+            font-size: 0.78rem;
+            color: #9ca3af;
+            user-select: none;
+        }
+        details.delete-box summary:hover { color: var(--green-700); }
+        .delete-form {
+            margin-top: 8px;
+            display: flex;
+            gap: 8px;
+        }
+        .delete-form input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.85rem;
+        }
+        .delete-form button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 8px;
+            background: #fee2e2;
+            color: #b91c1c;
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+        }
+        .delete-form button:hover { background: #fecaca; }
+
+        .empty {
+            text-align: center;
+            color: #9ca3af;
+            padding: 40px 0;
+        }
+        .count {
+            font-size: 0.85rem;
+            color: var(--green-700);
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <header>
+            <h1>🌿 방명록</h1>
+            <p>다녀가신 흔적을 남겨주세요</p>
+        </header>
+
+        {% if error %}
+        <div class="error">{{ error }}</div>
+        {% endif %}
+
+        <section class="card">
+            <h2>새 글 남기기</h2>
+            <form action="/add" method="post">
+                <div class="row">
+                    <div class="field">
+                        <label for="name">이름</label>
+                        <input id="name" type="text" name="name" maxlength="20" required>
+                    </div>
+                    <div class="field">
+                        <label for="password">삭제 비밀번호</label>
+                        <input id="password" type="password" name="password" maxlength="30" required>
+                    </div>
+                </div>
+                <div class="field">
+                    <label for="message">방명록 내용</label>
+                    <textarea id="message" name="message" maxlength="500" required></textarea>
+                </div>
+                <button class="submit" type="submit">남기기</button>
+            </form>
+        </section>
+
+        <p class="count">전체 {{ entries|length }}개의 글</p>
+
+        {% if entries %}
+        <ul class="entries">
+            {% for e in entries %}
+            <li class="entry">
+                <div class="avatar">{{ e.name[0]|upper }}</div>
+                <div class="entry-body">
+                    <div class="entry-top">
+                        <span class="entry-name">{{ e.name }}</span>
+                        <span class="entry-date">{{ e.created_at }}</span>
+                    </div>
+                    <p class="entry-message">{{ e.message }}</p>
+                    <details class="delete-box">
+                        <summary>삭제하기</summary>
+                        <form class="delete-form" action="/delete/{{ e.id }}" method="post">
+                            <input type="password" name="password" placeholder="비밀번호" required>
+                            <button type="submit">삭제</button>
+                        </form>
+                    </details>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+        {% else %}
+        <p class="empty">아직 남겨진 글이 없어요. 첫 글을 남겨보세요!</p>
+        {% endif %}
+    </div>
+</body>
+</html>
