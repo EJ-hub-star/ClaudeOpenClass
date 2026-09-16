@@ -1,0 +1,20 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(pip show *)",
+      "Bash(pip install *)",
+      "Bash(python -m uvicorn 03.number_game_web:app --port 8099)",
+      "Bash(jobs -l)",
+      "Bash(kill %1)",
+      "Bash(wait)",
+      "Bash(python 03.number_game_web.py)",
+      "Bash(echo \"PID: $!\")",
+      "Bash(curl -s -c /tmp/cj.txt -i http://127.0.0.1:8000/)",
+      "Bash(curl -s -b /tmp/cj.txt -c /tmp/cj.txt -i http://127.0.0.1:8000/new)",
+      "Bash(curl -s -b /tmp/cj.txt http://127.0.0.1:8000/)",
+      "Bash(kill 30436)",
+      "Bash(rm -f /tmp/cj.txt)",
+      "Bash(fuser 8000/tcp)"
+    ]
+  }
+}
